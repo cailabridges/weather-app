@@ -21,7 +21,7 @@ function formatDate(date) {
     hours = `0${hours}`;
   }
 
-  return `${day} ${hours}:${minutes}`;
+  return `${day} ${hours}:${minutes}, `;
 }
 
 function getCurrentDate() {
@@ -29,13 +29,34 @@ function getCurrentDate() {
   return formatDate(now);
 }
 
+function capitalizeFirstLetter(str) {
+  let words = str.split(" ");
+  for (let i = 0; i < words.length; i++) {
+    words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+  }
+  return words.join(" ");
+}
+
 function displayWeather(response) {
   let temperatureElement = document.querySelector("#current-temp");
   let temperature = Math.round(response.data.temperature.current);
   let cityElement = document.querySelector("#current-city");
+  let descriptionElement = document.querySelector("#description")
+  let humidityElement = document.querySelector("#humidity")
+  let windElement = document.querySelector("#wind")
+
+  let description = response.data.condition.description;
+  description = capitalizeFirstLetter(description);
+
+  let humidity = response.data.temperature.humidity;
+  let wind = Math.round(response.data.wind.speed);
+  
 
   cityElement.innerHTML = response.data.city;
   temperatureElement.innerHTML = temperature;
+  descriptionElement.innerHTML = description;
+  humidityElement.innerHTML = `${humidity}%`;
+  windElement.innerHTML = `${wind}km/h`;
 }
 
 function searchCity(city) {
