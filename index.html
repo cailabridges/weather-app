@@ -1,58 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="src/styles.css" />
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <title>My weather application</title>
-  </head>
-  <body>
-    <div class="weather-app-container">
-      <header>
-        <form id="search-form">
-          <input
-            type="search"
-            placeholder="Enter a city.."
-            class="search-input"
-            id="search-input"
-            required
-          />
-          <input
-            type="submit"
-            value="Search"
-            class="search-button"
-            id="search-button"
-          />
-        </form>
-      </header>
-      <main>
-        <div class="current-weather-container">
-          <div>
-            <h1 class="current-city" id="current-city">Paris</h1>
-            <p class="current-details">
-              <span class="current-date" id="current-date">Saturday 15:32, </span>
-               <span id="description"></span>
-              <br />
-              Humidity: <strong id="humidity">87%</strong>, Wind: <strong id="wind">7.2km/h</strong>
-            </p>
-          </div>
-          <div class="current-temperature-container">
-            <span class="current-temperature-icon">☀️</span>
-            <span class="current-temperature-value" id="current-temp">14</span>
-            <span class="current-temperature-unit">°C</span>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="src/styles.css" />
+  <!-- Include Weather Icons CSS -->
+  <link rel="stylesheet" href="src/weather-icons.css">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <title>My weather application</title>
+</head>
+<body>
+  <div class="weather-app-container">
+    <header>
+      <form id="search-form">
+        <input
+          type="search"
+          placeholder="Enter a city.."
+          class="search-input"
+          id="search-input"
+          required
+        />
+        <input
+          type="submit"
+          value="Search"
+          class="search-button"
+          id="search-button"
+        />
+      </form>
+    </header>
+    <main>
+      <div class="current-weather-container">
+        <div>
+          <h1 class="current-city" id="current-city">Raleigh</h1>
+          <p class="current-details">
+            <span class="current-date" id="current-date">Saturday 15:32, </span>
+             <span id="description"></span>
+            <br />
+            Humidity: <strong id="humidity">87%</strong>, Wind: <strong id="wind-speed">7.2km/h</strong>
+          </p>
         </div>
-      </main>
-      <footer>
-        <p>
-          This project was coded by
-          <a href="https://github.com/cailabridges" target="_blank">Caila Bridges</a> and is
-          <a href="https://github.com/cailabridges/weather-app" target="_blank"> open-sourced on GitHub</a> and
-          <a href="https://worldlyweather.netlify.app/" target="_blank">hosted on Netlify</a>
-        </p>
-      </footer>
-    </div>
-    <script src="src/index.js"></script>
-  </body>
+        <div class="current-temperature-container">
+          <!-- Use inline SVG icons or Weather Icons classes -->
+          <!-- <img src="http://shecodes-assets.s3.amazonaws.com/api/weather/icons/broken-clouds-night.png" alt="weather icon" class="current-temperature-icon" id="current-temp-icon"> -->
+          <i class="wi" id="current-temp-icon"></i>
+          <span class="current-temperature-value" id="current-temp">14</span>
+          <span class="current-temperature-unit">°C</span>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <p>
+        This project was coded by
+        <a href="https://github.com/cailabridges" target="_blank">Caila Bridges</a> and is
+        <a href="https://github.com/cailabridges/weather-app" target="_blank"> open-sourced on GitHub</a> and
+        <a href="https://worldlyweather.netlify.app/" target="_blank">hosted on Netlify</a>
+      </p>
+    </footer>
+  </div>
+  <script src="src/index.js"></script>
+</body>
 </html>
