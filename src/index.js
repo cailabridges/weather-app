@@ -9,8 +9,10 @@ const customIcons = {
   "rain": "<i class='wi wi-rain'></i>",
   "light rain": "<i class='wi wi-rain'></i>",
   "moderate rain": "<i class='wi wi-rain'></i>",
+  "heavy intensity rain": "<i class='wi wi-rain'></i>",
   "thunderstorm": "<i class='wi wi-thunderstorm'></i>",
   "thunderstorm with rain": "<i class='wi wi-thunderstorm'></i>",
+  "thunderstorm with heavy rain": "<i class='wi wi-thunderstorm'></i>",
   "snow": "<i class='wi wi-snow'></i>",
   "mist": "<i class='wi wi-fog'></i>",
   "haze": "<i class='wi wi-fog'></i>",
@@ -131,8 +133,8 @@ function displayForecast(response) {
         let description = day.condition?.description || '';
         description = capitalizeFirstLetter(description);
         let customIcon = customIcons[description.toLowerCase()] || '';
-        console.log(description)
-        console.log(customIcon)
+        // console.log(description)
+        // console.log(customIcon)
 
         forecastHtml += `
           <div class="weather-forecast">
@@ -159,7 +161,41 @@ function displayForecast(response) {
   
 }
 
+// Converting Celcius/Fahrenheit
+function celsiusToFahrenheit(celsius) {
+  return (celsius * 9 / 5) + 32;
+}
 
+function fahrenheitToCelsius(fahrenheit) {
+  return (fahrenheit - 32) * 5 / 9;
+}
+
+function handleTemperatureUnitToggle(event) {
+  event.preventDefault();
+
+  let currentTempElement = document.querySelector("#current-temp");
+  let currentTempUnitElement = document.querySelector("#current-temperature-unit-c");
+  let currentTempToggle = document.querySelector("#current-temperature-unit-f")
+  let currentTempValue = parseFloat(currentTempElement.innerHTML);
+
+  if (currentTempUnitElement.innerHTML === "°C") {
+    // Convert Celsius to Fahrenheit
+    let tempInFahrenheit = celsiusToFahrenheit(currentTempValue);
+    currentTempElement.innerHTML = tempInFahrenheit.toFixed(1);
+    currentTempUnitElement.innerHTML = "°F";
+    currentTempToggle.innerHTML = "°C";
+  } else {
+    // Convert Fahrenheit to Celsius
+    let tempInCelsius = fahrenheitToCelsius(currentTempValue);
+    currentTempElement.innerHTML = tempInCelsius.toFixed(1);
+    currentTempUnitElement.innerHTML = "°C";
+    currentTempToggle.innerHTML = "°F";
+  }
+}
+
+
+let temperatureUnitButton = document.querySelector("#current-temperature-unit-f");
+temperatureUnitButton.addEventListener("click", handleTemperatureUnitToggle);
 
 let searchForm = document.querySelector("#search-form");
 searchForm.addEventListener("submit", handleSearchSubmit);

@@ -97,9 +97,26 @@ footer a {
   margin-left: 10px;
 }
 
-.current-temperature-unit {
-  font-size: 28px;
-  margin-top: 10px;
+.current-temperature-unit-c {
+  font-size: 20px;
+  margin: 12px 0 0 2px;
+}
+
+.current-temp-divider {
+  font-size: 18px;
+  margin: 12px 4px 0px 6px;
+  opacity: 0.4;
+}
+
+.current-temperature-unit-f {
+  font-size: 20px;
+  margin-top: 12px;
+  text-decoration: none;
+  color:  #e27d60; 
+  transition: all 100ms ease-in-out;
+}
+.current-temperature-unit-f:hover {
+  opacity: 0.5;
 }
 
 /* Weather forecast */
