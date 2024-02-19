@@ -79,16 +79,16 @@ footer a {
 .current-weather-container {
   display: flex;
   justify-content: space-between;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 .current-temperature-container {
   display: flex;
 }
 
-.current-temperature-icon {
-  font-size: 40px;
-  margin-top: 12px;
+.current-temperature-container i {
+  font-size: 60px;
+  margin: 9px 2px 0 0;
 }
 
 .current-temperature-value {
@@ -102,31 +102,32 @@ footer a {
   margin-top: 10px;
 }
 
-/* weather forecast */
+/* Weather forecast */
 .weather-forecast {
-  margin-top: 20px;
+  margin: 10px 5px;
+  display: flex; 
+  justify-content: space-between; 
   text-align: center;
 }
 
-.row {
-  display: flex;
-}
-
 .col-2 {
-  display: flex;
-  flex-direction: column; 
-  align-items: center;
+  flex: 1; 
+  max-width: 100px; 
 }
 
 .col-2 i {
   margin: 5px 0; 
 }
 
-.weather-forecast-date{
+.weather-forecast-date {
   font-size: 16px;
-  color: black;
+  opacity: 0.5;
 }
 
 .weather-forecast-temps {
   font-size: 14px;
+}
+
+.weather-forecast-temp-min {
+  opacity: 0.5;
 }

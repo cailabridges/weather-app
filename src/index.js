@@ -1,12 +1,14 @@
 const customIcons = {
-  "clear sky": "<i class='wi wi-day-sunny'></i>",
+  "clear sky": "<i class='wi wi-day-sunny' ></i>",
   "few clouds": "<i class='wi wi-day-cloudy'></i>",
   "scattered clouds": "<i class='wi wi-day-cloudy-high'></i>",
   "broken clouds": "<i class='wi wi-cloudy'></i>",
   "overcast clouds": "<i class='wi wi-cloudy'></i>",
   "shower rain": "<i class='wi wi-showers'></i>",
   "rain": "<i class='wi wi-rain'></i>",
+  "light rain": "<i class='wi wi-rain'></i>",
   "thunderstorm": "<i class='wi wi-thunderstorm'></i>",
+  "thunderstorm with rain": "<i class='wi wi-thunderstorm'></i>",
   "snow": "<i class='wi wi-snow'></i>",
   "mist": "<i class='wi wi-fog'></i>",
   "haze": "<i class='wi wi-fog'></i>",
@@ -59,7 +61,7 @@ function displayWeather(response) {
   let descriptionElement = document.querySelector("#description")
   let humidityElement = document.querySelector("#humidity")
   let windElement = document.querySelector("#wind-speed")
-  let iconElement = document.querySelector("#current-temp-icon")
+  let iconElement = document.querySelector("#current-temperature-icon")
 
   let description = response.data.condition.description;
   description = capitalizeFirstLetter(description);
@@ -78,6 +80,7 @@ function displayWeather(response) {
 
   if (customIcon) {
     iconElement.className = '';
+    iconElement.id = 'current-temperature-icon';
     iconElement.innerHTML = customIcon;
   } else {
     
@@ -101,6 +104,31 @@ function handleSearchSubmit(event) {
   currentDateElement.innerHTML = getCurrentDate();
 }
 
+function displayForecast() {
+  let days = ["Tue", "Wed", "Thu", "Fri", "Sat"];
+  let forecastHtml = "";
+  
+  days.forEach(function (day) {
+  
+    forecastHtml = forecastHtml +
+    `<div class="weather-forecast">
+            <div class="row">
+              <div class="col-2">
+                <div class="weather-forecast-date">${day}</div>
+                <i class="wi" id="icon-1">☀</i>
+                <div class="weather-forecast-temps">
+                  <span class="weather-forecast-temp-max">18°</span>
+                  <span class="weather-forecast-temp-min">12°</span>
+                </div>
+              </div>
+            </div>
+          </div>
+    `;
+  });
+  let forecastElement = document.querySelector("#forecast");
+  forecastElement.innerHTML = forecastHtml;
+  }
+
 let searchForm = document.querySelector("#search-form");
 searchForm.addEventListener("submit", handleSearchSubmit);
 
@@ -108,3 +136,6 @@ let currentDateElement = document.querySelector("#current-date");
 currentDateElement.innerHTML = getCurrentDate();
 
 searchCity("Raleigh");
+displayForecast();
+
+
