@@ -16,6 +16,7 @@ const customIcons = {
   "snow": "<i class='wi wi-snow'></i>",
   "mist": "<i class='wi wi-fog'></i>",
   "haze": "<i class='wi wi-fog'></i>",
+  "smoke": "<i class='wi wi-fog'></i>",
 };
 
 
@@ -69,6 +70,7 @@ function displayWeather(response) {
 
   let description = response.data.condition.description;
   description = capitalizeFirstLetter(description);
+  console.log(description)
 
   let humidity = response.data.temperature.humidity;
   let wind = Math.round(response.data.wind.speed);
