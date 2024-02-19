@@ -5,6 +5,7 @@ const customIcons = {
   "scattered clouds": "<i class='wi wi-day-cloudy-high'></i>",
   "broken clouds": "<i class='wi wi-cloudy'></i>",
   "overcast clouds": "<i class='wi wi-cloudy'></i>",
+  "few clouds": "<i class='wi wi-cloudy'></i>",
   "shower rain": "<i class='wi wi-showers'></i>",
   "rain": "<i class='wi wi-rain'></i>",
   "light rain": "<i class='wi wi-rain'></i>",
@@ -14,8 +15,11 @@ const customIcons = {
   "thunderstorm with rain": "<i class='wi wi-thunderstorm'></i>",
   "thunderstorm with heavy rain": "<i class='wi wi-thunderstorm'></i>",
   "snow": "<i class='wi wi-snow'></i>",
+  "light snow": "<i class='wi wi-snow'></i>",
+  "rain and snow": "<i class='wi wi-snow'></i>",
   "mist": "<i class='wi wi-fog'></i>",
   "haze": "<i class='wi wi-fog'></i>",
+  "fog": "<i class='wi wi-fog'></i>",
   "smoke": "<i class='wi wi-fog'></i>",
 };
 
@@ -70,7 +74,7 @@ function displayWeather(response) {
 
   let description = response.data.condition.description;
   description = capitalizeFirstLetter(description);
-  console.log(description)
+  console.log(description);
 
   let humidity = response.data.temperature.humidity;
   let wind = Math.round(response.data.wind.speed);
@@ -197,6 +201,7 @@ function displayForecast(response) {
         let description = day.condition?.description || '';
         description = capitalizeFirstLetter(description);
         let customIcon = customIcons[description.toLowerCase()] || '';
+        console.log(description);
 
         
         let tempUnit = document.querySelector("#current-temperature-unit-c").innerHTML;
