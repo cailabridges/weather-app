@@ -97,7 +97,13 @@ function displayWeather(response) {
 function searchCity(city) {
   let apiKey = "241ff083e917bb12t439a7aco17d1be3";
   let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
-  axios.get(apiUrl).then(displayWeather);
+  axios.get(apiUrl).then(function(response) {
+    displayWeather(response);
+    
+    document.querySelector("#current-temperature-unit-c").innerHTML = "°C";
+    
+    handleTemperatureUnitToggle();
+  });
 }
 
 function handleSearchSubmit(event) {
@@ -110,6 +116,63 @@ function handleSearchSubmit(event) {
   currentDateElement.innerHTML = getCurrentDate();
 }
 
+// Converting Celcius/Fahrenheit
+function celsiusToFahrenheit(celsius) {
+  return Math.round((celsius * 9 / 5) + 32);
+}
+
+function fahrenheitToCelsius(fahrenheit) {
+  return Math.round((fahrenheit - 32) * 5 / 9);
+}
+
+function handleTemperatureUnitToggle(event) {
+  if (event) {
+    event.preventDefault();
+  }
+
+  let currentTempElement = document.querySelector("#current-temp");
+  let currentTempUnitElement = document.querySelector("#current-temperature-unit-c");
+  let currentTempToggle = document.querySelector("#current-temperature-unit-f");
+  let forecastMaxTemps = document.querySelectorAll(".weather-forecast-temp-max");
+  let forecastMinTemps = document.querySelectorAll(".weather-forecast-temp-min");
+
+  if (currentTempUnitElement.innerHTML === "°C") {
+   
+    currentTempElement.innerHTML = celsiusToFahrenheit(parseFloat(currentTempElement.innerHTML));
+    currentTempUnitElement.innerHTML = "°F";
+    currentTempToggle.innerHTML = "°C";
+
+    
+    forecastMaxTemps.forEach(function(maxTempElement) {
+      let celsiusTemp = parseInt(maxTempElement.innerHTML);
+      maxTempElement.innerHTML = celsiusToFahrenheit(celsiusTemp) + "°";
+    });
+
+    forecastMinTemps.forEach(function(minTempElement) {
+      let celsiusTemp = parseInt(minTempElement.innerHTML);
+      minTempElement.innerHTML = celsiusToFahrenheit(celsiusTemp) + "°";
+    });
+  } else {
+
+    currentTempElement.innerHTML = fahrenheitToCelsius(parseFloat(currentTempElement.innerHTML));
+    currentTempUnitElement.innerHTML = "°C";
+    currentTempToggle.innerHTML = "°F";
+
+    forecastMaxTemps.forEach(function(maxTempElement) {
+      let fahrenheitTemp = parseInt(maxTempElement.innerHTML);
+      maxTempElement.innerHTML = fahrenheitToCelsius(fahrenheitTemp) + "°";
+    });
+
+    forecastMinTemps.forEach(function(minTempElement) {
+      let fahrenheitTemp = parseInt(minTempElement.innerHTML);
+      minTempElement.innerHTML = fahrenheitToCelsius(fahrenheitTemp) + "°";
+    });
+  }
+}
+
+
+
+//Displaying Forecast
 function formatDay(timestamp) {
   let date = new Date(timestamp * 1000);
   let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -124,17 +187,21 @@ function getForecast(city){
 }
 
 function displayForecast(response) {
-
   let forecastHtml = "";
 
   if (response && response.data && response.data.daily) {
-    response.data.daily.forEach(function (day, index) {
+    response.data.daily.forEach(function(day, index) {
       if (index < 5) {
         let description = day.condition?.description || '';
         description = capitalizeFirstLetter(description);
         let customIcon = customIcons[description.toLowerCase()] || '';
-        // console.log(description)
-        // console.log(customIcon)
+
+        
+        let tempUnit = document.querySelector("#current-temperature-unit-c").innerHTML;
+
+        
+        let maxTemp = tempUnit === "°C" ? Math.round(day.temperature.maximum) + "°" : celsiusToFahrenheit(Math.round(day.temperature.maximum)) + "°";
+        let minTemp = tempUnit === "°C" ? Math.round(day.temperature.minimum) + "°" : celsiusToFahrenheit(Math.round(day.temperature.minimum)) + "°";
 
         forecastHtml += `
           <div class="weather-forecast">
@@ -143,8 +210,8 @@ function displayForecast(response) {
                 <div class="weather-forecast-date">${formatDay(day.time)}</div>
                 <i class="wi" id="forecast-icon-${index}">${customIcon}</i>
                 <div class="weather-forecast-temps">
-                  <span class="weather-forecast-temp-max">${Math.round(day.temperature.maximum)}°</span>
-                  <span class="weather-forecast-temp-min">${Math.round(day.temperature.minimum)}°</span>
+                  <span class="weather-forecast-temp-max">${maxTemp}</span>
+                  <span class="weather-forecast-temp-min">${minTemp}</span>
                 </div>
               </div>
             </div>
@@ -155,44 +222,8 @@ function displayForecast(response) {
 
     let forecastElement = document.querySelector("#forecast");
     forecastElement.innerHTML = forecastHtml;
-  } else {
-    
-  }
-  
-}
-
-// Converting Celcius/Fahrenheit
-function celsiusToFahrenheit(celsius) {
-  return (celsius * 9 / 5) + 32;
-}
-
-function fahrenheitToCelsius(fahrenheit) {
-  return (fahrenheit - 32) * 5 / 9;
-}
-
-function handleTemperatureUnitToggle(event) {
-  event.preventDefault();
-
-  let currentTempElement = document.querySelector("#current-temp");
-  let currentTempUnitElement = document.querySelector("#current-temperature-unit-c");
-  let currentTempToggle = document.querySelector("#current-temperature-unit-f")
-  let currentTempValue = parseFloat(currentTempElement.innerHTML);
-
-  if (currentTempUnitElement.innerHTML === "°C") {
-    // Convert Celsius to Fahrenheit
-    let tempInFahrenheit = celsiusToFahrenheit(currentTempValue);
-    currentTempElement.innerHTML = tempInFahrenheit.toFixed(1);
-    currentTempUnitElement.innerHTML = "°F";
-    currentTempToggle.innerHTML = "°C";
-  } else {
-    // Convert Fahrenheit to Celsius
-    let tempInCelsius = fahrenheitToCelsius(currentTempValue);
-    currentTempElement.innerHTML = tempInCelsius.toFixed(1);
-    currentTempUnitElement.innerHTML = "°C";
-    currentTempToggle.innerHTML = "°F";
   }
 }
-
 
 let temperatureUnitButton = document.querySelector("#current-temperature-unit-f");
 temperatureUnitButton.addEventListener("click", handleTemperatureUnitToggle);
@@ -204,6 +235,6 @@ let currentDateElement = document.querySelector("#current-date");
 currentDateElement.innerHTML = getCurrentDate();
 
 searchCity("Raleigh");
-displayForecast();
+
 
 
