@@ -1,5 +1,6 @@
 const customIcons = {
   "clear sky": "<i class='wi wi-day-sunny' ></i>",
+  "sky is clear": "<i class='wi wi-day-sunny' ></i>",
   "few clouds": "<i class='wi wi-day-cloudy'></i>",
   "scattered clouds": "<i class='wi wi-day-cloudy-high'></i>",
   "broken clouds": "<i class='wi wi-cloudy'></i>",
@@ -7,6 +8,7 @@ const customIcons = {
   "shower rain": "<i class='wi wi-showers'></i>",
   "rain": "<i class='wi wi-rain'></i>",
   "light rain": "<i class='wi wi-rain'></i>",
+  "moderate rain": "<i class='wi wi-rain'></i>",
   "thunderstorm": "<i class='wi wi-thunderstorm'></i>",
   "thunderstorm with rain": "<i class='wi wi-thunderstorm'></i>",
   "snow": "<i class='wi wi-snow'></i>",
@@ -86,11 +88,13 @@ function displayWeather(response) {
     
     iconElement.innerHTML = response.data.condition.icon_url; 
   }
+
+  getForecast(response.data.city);
 }
 
 function searchCity(city) {
   let apiKey = "241ff083e917bb12t439a7aco17d1be3";
-  let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
+  let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
   axios.get(apiUrl).then(displayWeather);
 }
 
@@ -104,30 +108,58 @@ function handleSearchSubmit(event) {
   currentDateElement.innerHTML = getCurrentDate();
 }
 
-function displayForecast() {
-  let days = ["Tue", "Wed", "Thu", "Fri", "Sat"];
+function formatDay(timestamp) {
+  let date = new Date(timestamp * 1000);
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  return days[date.getDay()];
+}
+
+function getForecast(city){
+  let apiKey = "241ff083e917bb12t439a7aco17d1be3";
+  let apiUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=metric`;
+  axios.get(apiUrl).then(displayForecast);
+}
+
+function displayForecast(response) {
+
   let forecastHtml = "";
-  
-  days.forEach(function (day) {
-  
-    forecastHtml = forecastHtml +
-    `<div class="weather-forecast">
+
+  if (response && response.data && response.data.daily) {
+    response.data.daily.forEach(function (day, index) {
+      if (index < 5) {
+        let description = day.condition?.description || '';
+        description = capitalizeFirstLetter(description);
+        let customIcon = customIcons[description.toLowerCase()] || '';
+        console.log(description)
+        console.log(customIcon)
+
+        forecastHtml += `
+          <div class="weather-forecast">
             <div class="row">
               <div class="col-2">
-                <div class="weather-forecast-date">${day}</div>
-                <i class="wi" id="icon-1">☀</i>
+                <div class="weather-forecast-date">${formatDay(day.time)}</div>
+                <i class="wi" id="forecast-icon-${index}">${customIcon}</i>
                 <div class="weather-forecast-temps">
-                  <span class="weather-forecast-temp-max">18°</span>
-                  <span class="weather-forecast-temp-min">12°</span>
+                  <span class="weather-forecast-temp-max">${Math.round(day.temperature.maximum)}°</span>
+                  <span class="weather-forecast-temp-min">${Math.round(day.temperature.minimum)}°</span>
                 </div>
               </div>
             </div>
           </div>
-    `;
-  });
-  let forecastElement = document.querySelector("#forecast");
-  forecastElement.innerHTML = forecastHtml;
+        `;
+      }
+    });
+
+    let forecastElement = document.querySelector("#forecast");
+    forecastElement.innerHTML = forecastHtml;
+  } else {
+    
   }
+  
+}
+
+
 
 let searchForm = document.querySelector("#search-form");
 searchForm.addEventListener("submit", handleSearchSubmit);
